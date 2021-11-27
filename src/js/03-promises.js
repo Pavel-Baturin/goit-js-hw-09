@@ -6,55 +6,41 @@ refForm.addEventListener('submit', onFormSubmit);
 
 let intervalId = null;
 let numberPromises = 0;
-let firstDelay = refFirstDelay.value;
-let delayStep = refDelayStep.value;
+
 let position = numberPromises + 1;
 
 function onFormSubmit(event) {
   event.preventDefault()
-  amount = refAmount.value;
-   setTimeout(() => {
-       delay = firstDelay;
-       createPromise(position, delay)
+  const amount = +refAmount.value;
+  let firstDelay = +refFirstDelay.value;
+  let delayStep = +refDelayStep.value;
+       for (let i = 0; i < amount; i += 1) {
+         
+         createPromise(i+1, firstDelay)
         .then(({ position, delay }) => {
           console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
         })
         .catch(({ position, delay }) => {
         console.log(`❌ Rejected promise ${position} in ${delay}ms`);
         });
-     numberPromises += 1;
-   }, firstDelay);
-  
-  
-     intervalId = setInterval(() => {
-    if (amount > numberPromises) {
-      numberPromises += 1;
-      delay = firstDelay + delayStep;
-      createPromise(position, delay)
-        .then(({ position, delay }) => {
-          console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
-        })
-        .catch(({ position, delay }) => {
-        console.log(`❌ Rejected promise ${position} in ${delay}ms`);
-        });
-    } else {
-      clearInterval(intervalId);
-    }
-    }, delayStep); 
+         firstDelay += delayStep;
+       }
+      
       
         
   
 }
 
-function createPromise(position, delay) {
+function createPromise( position, delay ) {
   
   return new Promise((resolve, reject) => {
-    const shouldResolve = Math.random() > 0.3;
+    
     setTimeout(() => {
+      const shouldResolve = Math.random() > 0.3;
       if (shouldResolve) {
-    resolve(`✅ Fulfilled promise ${position} in ${delay}ms`);
+    resolve({position, delay});
   } else {
-    reject("Error! Error passed to reject function");
+    reject({position, delay});
   }
     }, delay);
     
