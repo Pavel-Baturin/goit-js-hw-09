@@ -7,13 +7,12 @@ refForm.addEventListener('submit', onFormSubmit);
 let intervalId = null;
 let numberPromises = 0;
 
-let position = numberPromises + 1;
 
 function onFormSubmit(event) {
   event.preventDefault()
-  const amount = +refAmount.value;
-  let firstDelay = +refFirstDelay.value;
-  let delayStep = +refDelayStep.value;
+  const amount = Number(refAmount.value);
+  let firstDelay = Number(refFirstDelay.value);
+  let delayStep = Number(refDelayStep.value);
        for (let i = 0; i < amount; i += 1) {
          
          createPromise(i+1, firstDelay)
